@@ -1,0 +1,108 @@
+---
+subtitle: "Plan d'analyse statistique"
+toc: true
+lof: false
+lot: false
+cache: true
+---
+
+```{r setup, include= FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE,
+ fig.width = 7,
+ fig.asp = 0.8,
+ out.width = "100%"
+)
+```
+
+```{r info}
+rm(list=ls())
+library("baseph")
+library("tidyverse")
+library("kableExtra")
+# sessionInfo()
+```
+
+# Généralités
+
+Étude interventionnelle, prospective, randomisée, multicentrique (Jardé II) avec usage d'un dispositif médical.
+
+
+Le risque $\alpha$ retenu sera de 0,05 & la puissance de 0,8. La seule donnée numérique (âge des patients) sera discrétisée. 
+
+Toutes les données seront présentées par le nombre pour chaque classe de réponse avec le pourcentage. Pour les réponses en oui/non seuls les `oui` seront présentés.
+
+Sauf indication contraires pour les tests simples les variables numériques seront comparées par un test de Student si possible ( effectifs suffisants, distribution normales (Test de Shapiro-Wilk), égalité des variances) auquel cas un test non paramétrique de Wilcoxon sera utilisé. Un test du $\chi^2$ de Pearson sera utilisé pour les variables discrètes sous réserve d'un effectif suffisant. À défaut un test exact de Fischer sera utilisé. Un modèle de régression logistique a été employé. Ce modèle de régression a été limité aux facteurs associés à la réponse en utilisant les critères ayant une la réponse significative avec un seuil p.value = 0,2 lors de l’étape précédente. Une recherche du meilleur modèle a été réalisée par un step-by-step descendant évaluée par le critère d’information d’Akaike. Des graphiques seront réalisés pour les résultats importants ^[Package `ggplot2` [@ggplot]].
+
+## Taille de l'échantillon
+
+```{r}
+#| label: taille
+
+ex <- 0.1
+px <- 0.5
+np <- 100000
+nn <- nb.obs.ph(px = px,ex = ex, np = np)
+nn <- floor(3*nn*1.1)+1
+```
+
+Le critère principal est le volume de néo-tissu obtenue évalué sur l'épaisseur de celui-ci. La mesure est réalisée par TDM à 6 mois.  
+
+::: {.callout-note title="Nombre de cas nécessaires"}
+**00 patients par groupe**
+:::
+
+
+## Données manquantes
+
+Le décompte des données manquantes sera réalisé & présenté par un tableau ou un graphique. Les variables comportant trop de données manquantes ou non utilisables ne seront pas prises en compte après validation par le promoteur. Tous les cas où la mesure à 6 mois de la greffe est absente seront exclus.
+
+Après ce premier tri une imputation des données manquantes ^[Package `missMDA` [@miss]] sera réalisée uniquement pour l'analyse factorielle & pour la recherche du meilleur modèle par step-by-tep descendant pour les analyses par régression (logistique ou linéaire). Néanmoins pour cette analyse, après choix du modèle, le calcul final sera fait avec les données réelles. 
+
+
+## Validation des données
+
+
+Une recherche de corrélation ^[Package `corr` [@corr]] entre les variables sera réalisée. Si certaines variables se montreront trop corrélées elles devront être exclues de l'étude après accord du promoteur. 
+
+
+# Analyse simple (Critère principal)
+
+## Analyse descriptive
+
+Les données seront présentées par le nombre pour chaque classe de réponse avec le pourcentage. Pour les réponses en oui/non seuls les `oui` seront présentés.
+
+## Analyse univariée
+
+Les variables numériques seront comparées par un test de Student si possible ( effectifs suffisants, distribution normales (Test de Shapiro-Wilk), égalité des variances) auquel cas un test non paramétrique de Wilcoxon sera utilisé. Un test du $\chi^2$ de Pearson sera utilisé pour les variables discrètes sous réserve d'un effectif suffisant. À défaut un test exact de Fischer sera utilisé.
+
+## Analyse factorielle
+
+Si le nombre de cas recueillis le permet une analyse factorielle en Analyse de correspondances multiples (MCA) sera réalisée^[package `FactoMineR` [@facto]]. 
+Cette analyse ne pourra être qu'après imputation des données manquantes ce qui n'est possible que si ces dernières ne sont pas trop nombreuses.
+
+# Objectifs secondaires
+
+## Objectif 1 
+
+
+## Objectif 2 
+
+
+## Objectif 3 
+
+
+## Objectif 4 
+
+## Objectif 5 
+
+## Objectif 6 
+
+\appendix 
+
+# Technique {.appendix}
+
+L'analyse statistique sera réalisée avec le logiciel **R**[@rstat] & divers packages. Outre ceux cités dans le texte ou utilisera en particulier `tidyverse` [@tidy] & `baseph` [@baseph].
+
+Un dépôt GitHub sera utilisé qui ne comprendra que le code & non les données ou résultats. Au besoin un faux tableau de données sera présenté pour permettre des tests.
+
+<https://github.com/philippemichel/procbsl>
